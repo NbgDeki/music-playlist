@@ -4,15 +4,23 @@
       <img src="@/assets/ninja.png" alt="Ninja" />
       <h1><router-link :to="{ name: 'home' }">Muso Ninjas</router-link></h1>
       <div class="links">
-        <button @click="handleClick">Logout</button>
-        <router-link class="btn" :to="{ name: 'signup' }">Sign up</router-link>
-        <router-link class="btn" :to="{ name: 'login' }">Log in</router-link>
+        <div v-if="user">
+          <button @click="handleClick">Logout</button>
+        </div>
+
+        <div v-else>
+          <router-link class="btn" :to="{ name: 'signup' }"
+            >Sign up</router-link
+          >
+          <router-link class="btn" :to="{ name: 'login' }">Log in</router-link>
+        </div>
       </div>
     </nav>
   </div>
 </template>
 
 <script>
+import getUser from '@/composables/getUser';
 import useLogout from '@/composables/useLogout';
 import { useRouter } from 'vue-router';
 
@@ -21,6 +29,7 @@ export default {
 
   setup() {
     const { logout } = useLogout();
+    const { user } = getUser();
     const router = useRouter();
 
     const handleClick = async () => {
@@ -29,7 +38,8 @@ export default {
     };
 
     return {
-      handleClick
+      handleClick,
+      user
     };
   }
 };
