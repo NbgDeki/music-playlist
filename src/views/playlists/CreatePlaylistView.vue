@@ -17,11 +17,14 @@
 
 <script>
 import { ref } from 'vue';
+import useStorage from '@/composables/useStorage';
 
 export default {
   name: 'CreatePlaylist',
 
   setup() {
+    const { url, filePath, uploadImage } = useStorage();
+
     // refs
     const title = ref('');
     const description = ref('');
@@ -29,9 +32,10 @@ export default {
     const fileError = ref(null);
 
     // functions
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
       if (file.value) {
-        console.log(title.value, description.value, file.value);
+        await uploadImage(file.value);
+        console.log('image uploaded, url: ', url.value);
       }
     };
 
