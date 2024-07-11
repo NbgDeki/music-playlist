@@ -1,10 +1,15 @@
 <template>
   <div class="navbar">
     <nav>
-      <img src="@/assets/ninja.png" alt="Ninja" />
+      <router-link :to="{ name: 'home' }"
+        ><img src="@/assets/ninja.png" alt="Ninja"
+      /></router-link>
       <h1><router-link :to="{ name: 'home' }">Muso Ninjas</router-link></h1>
       <div class="links">
         <div v-if="user">
+          <router-link :to="{ name: 'createPlaylist' }"
+            >Create Playlist</router-link
+          >
           <button @click="handleClick">Logout</button>
         </div>
 
