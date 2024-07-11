@@ -1,7 +1,13 @@
-<template>Playlist Details</template>
+<template>
+  <h2>Playlist Details. ID - {{ id }}</h2>
+</template>
 
 <script>
-export default {};
+export default {
+  name: 'PlaylistDetails',
+
+  props: ['id']
+};
 </script>
 
-<style></style>
+<style lang="scss"></style>

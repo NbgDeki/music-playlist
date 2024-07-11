@@ -49,7 +49,8 @@ const routes = [
     path: '/playlists/:id',
     name: 'playlistDetails',
     component: PlaylistDetailsView,
-    beforeEnter: requireAuth
+    beforeEnter: requireAuth,
+    props: true
   }
 ];
 
