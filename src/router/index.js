@@ -4,6 +4,7 @@ import LoginView from '@/views/auth/LoginView.vue';
 import SignupView from '@/views/auth/SignupView.vue';
 import CreatePlaylistView from '@/views/playlists/CreatePlaylistView.vue';
 import PlaylistDetailsView from '@/views/playlists/PlaylistDetailsView.vue';
+import UserPlaylistsView from '@/views/playlists/UserPlaylistsView.vue';
 
 // route gurads
 import { projectAuth } from '@/firebase/config';
@@ -51,6 +52,13 @@ const routes = [
     component: PlaylistDetailsView,
     beforeEnter: requireAuth,
     props: true
+  },
+
+  {
+    path: '/playlists/user',
+    name: 'userPlaylists',
+    component: UserPlaylistsView,
+    beforeEnter: requireAuth
   }
 ];
 

@@ -14,7 +14,18 @@
 
     <!-- song list -->
     <div class="song-list">
-      <p>Song list here</p>
+      <div v-if="!playlist.songs.length">
+        No songs have been added to this playlist yet
+      </div>
+      <div class="single-song" v-for="song in playlist.songs" :key="song.id">
+        <div class="details">
+          <h3>{{ song.title }}</h3>
+          <p>{{ song.artist }}</p>
+        </div>
+
+        <button v-if="ownership" @click="handleClick(song.id)">Delete</button>
+      </div>
+      <add-song v-if="ownership" :playlist="playlist"></add-song>
     </div>
   </div>
 </template>
@@ -23,9 +34,14 @@
 import getDocument from '@/composables/getDocument';
 import getUser from '@/composables/getUser';
 import useDocument from '@/composables/useDocument';
+import useStorage from '@/composables/useStorage';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import AddSong from '@/components/AddSong.vue';
 
 export default {
+  components: { AddSong },
+
   name: 'PlaylistDetails',
 
   props: ['id'],
@@ -34,7 +50,9 @@ export default {
     const { id } = props;
     const { error, document: playlist } = getDocument('playlists', id);
     const { user } = getUser();
-    const { deleteDoc } = useDocument('playlists', id);
+    const { deleteDoc, updateDoc } = useDocument('playlists', id);
+    const { deleteImage } = useStorage();
+    const router = useRouter();
 
     const ownership = computed(() => {
       return (
@@ -43,10 +61,27 @@ export default {
     });
 
     const handleDelete = async () => {
+      await deleteImage(playlist.value.filePath);
       await deleteDoc();
+      router.push({ name: 'home' });
     };
 
-    return { error, playlist, ownership, handleDelete };
+    const handleClick = async (id) => {
+      const songs = playlist.value.songs.filter((song) => {
+        return song.id !== id;
+      });
+
+      await updateDoc({ songs });
+    };
+
+    return {
+      error,
+      playlist,
+      ownership,
+      handleDelete,
+      deleteImage,
+      handleClick
+    };
   }
 };
 </script>
@@ -96,5 +131,14 @@ export default {
 
 .description {
   text-align-last: left;
+}
+
+.single-song {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #ebebeb;
+  margin-bottom: 20px;
 }
 </style>
